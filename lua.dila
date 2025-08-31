@@ -1,0 +1,45 @@
+-- Silla voladora dorada con fuego
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+
+-- Crear la silla
+local chair = Instance.new("Seat")
+chair.Size = Vector3.new(4, 1, 4)
+chair.Anchored = false
+chair.CanCollide = false
+chair.Position = hrp.Position + Vector3.new(0, 3, 0)
+chair.BrickColor = BrickColor.new("Bright yellow")
+chair.Parent = workspace
+
+-- Poner al jugador en la silla
+character:MoveTo(chair.Position)
+hrp.CFrame = chair.CFrame
+chair:Sit(character:FindFirstChildOfClass("Humanoid"))
+
+-- Agregar fuego debajo de la silla
+local firePart = Instance.new("Part")
+firePart.Size = Vector3.new(4, 1, 4)
+firePart.Anchored = true
+firePart.CanCollide = false
+firePart.Position = chair.Position - Vector3.new(0, 3, 0)
+firePart.Parent = workspace
+
+local fire = Instance.new("Fire")
+fire.Heat = 10
+fire.Size = 10
+fire.Parent = firePart
+
+-- Control de vuelo
+local flying = true
+local speed = 50
+
+local RunService = game:GetService("RunService")
+RunService.Heartbeat:Connect(function(delta)
+    if flying then
+        chair.CFrame = chair.CFrame + chair.CFrame.LookVector * speed * delta
+        firePart.Position = chair.Position - Vector3.new(0, 3, 0)
+    end
+end)
+
+print("Silla voladora dorada con fuego lista! 🚀🔥")
